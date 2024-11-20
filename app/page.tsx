@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, Activity, Coffee, ChevronRight } from 'lucide-react'
+import { Brain, Activity, Coffee, ChevronRight, Clock, Heart, AlertTriangle } from 'lucide-react'
 
 export default function HomePage() {
   const { scrollYProgress } = useScroll()
@@ -40,7 +40,7 @@ export default function HomePage() {
             <p className="text-xl mb-8 max-w-2xl mx-auto text-gray-600">
               Discover the true impact of sleep deprivation and learn why prioritizing rest is crucial for your health and performance.
             </p>
-            <Button className="bg-gray-900 text-white hover:bg-gray-800 transition-colors">
+            <Button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
               Explore the Effects
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -66,7 +66,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-12 text-center">The Science of Sleep</h2>
             <div className="grid md:grid-cols-2 gap-8">
-              <Card className="bg-gradient-to-br from-blue-50 to-purple-50 border-none shadow-lg">
+              <Card className="bg-gradient-to-br from-blue-50 to-purple-50 border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardHeader>
                   <CardTitle className="flex items-center text-xl">
                     <Brain className="w-6 h-6 mr-2 text-blue-500" />
@@ -74,10 +74,13 @@ export default function HomePage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700">Sleep is a biological necessity, occurring in cycles of NREM and REM. Each phase plays a unique role in physical restoration, memory consolidation, and emotional regulation.</p>
+                  <p className="text-gray-700 mb-4">Discover the fascinating world of sleep cycles, NREM, and REM stages. Learn how each phase contributes to your overall well-being.</p>
+                  <Button variant="link" className="text-blue-500 hover:text-blue-700 p-0">
+                    Learn More <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
                 </CardContent>
               </Card>
-              <Card className="bg-gradient-to-br from-pink-50 to-purple-50 border-none shadow-lg">
+              <Card className="bg-gradient-to-br from-pink-50 to-purple-50 border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardHeader>
                   <CardTitle className="flex items-center text-xl">
                     <Coffee className="w-6 h-6 mr-2 text-pink-500" />
@@ -85,7 +88,10 @@ export default function HomePage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700">Sleep supports vital functions like immune defense, metabolic regulation, and brain health. Lack of sleep impairs these functions, leading to serious health risks.</p>
+                  <p className="text-gray-700 mb-4">Explore the vital functions of sleep, from immune defense to brain health. Understand why sleep is non-negotiable for your body and mind.</p>
+                  <Button variant="link" className="text-pink-500 hover:text-pink-700 p-0">
+                    Learn More <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
                 </CardContent>
               </Card>
             </div>
@@ -94,28 +100,48 @@ export default function HomePage() {
 
         <section className="py-24 bg-gray-50">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-12 text-center">Immediate Effects of Sleep Deprivation</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="bg-white border-none shadow-lg">
+            <h2 className="text-3xl font-bold mb-12 text-center">Effects of Sleep Deprivation</h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card className="bg-white border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardHeader>
                   <CardTitle className="flex items-center text-xl">
-                    <Activity className="w-6 h-6 mr-2 text-purple-500" />
-                    Effects on the Body
+                    <Clock className="w-6 h-6 mr-2 text-yellow-500" />
+                    Immediate Effects
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700">Just one night of poor sleep can weaken your immune system, producing less than half the antibodies compared to those who got enough sleep after a flu vaccine.</p>
+                  <p className="text-gray-700 mb-4">Experience decreased alertness, impaired memory, and mood swings. Learn how even one night of poor sleep impacts your day.</p>
+                  <Button variant="link" className="text-yellow-500 hover:text-yellow-700 p-0">
+                    Explore <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
                 </CardContent>
               </Card>
-              <Card className="bg-white border-none shadow-lg">
+              <Card className="bg-white border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardHeader>
                   <CardTitle className="flex items-center text-xl">
-                    <Brain className="w-6 h-6 mr-2 text-blue-500" />
-                    Effects on the Brain
+                    <Activity className="w-6 h-6 mr-2 text-green-500" />
+                    Short-term Effects
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700">Sleep deprivation affects your brain's ability to concentrate and react quickly, leading to increased 'lapses' or micro-sleeps during tasks requiring vigilance.</p>
+                  <p className="text-gray-700 mb-4">Discover how a week of insufficient sleep affects your physical performance, cognitive abilities, and emotional well-being.</p>
+                  <Button variant="link" className="text-green-500 hover:text-green-700 p-0">
+                    Discover <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-none shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <CardHeader>
+                  <CardTitle className="flex items-center text-xl">
+                    <AlertTriangle className="w-6 h-6 mr-2 text-red-500" />
+                    Long-term Effects
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-700 mb-4">Uncover the serious health risks associated with chronic sleep deprivation, including cardiovascular issues and mental health disorders.</p>
+                  <Button variant="link" className="text-red-500 hover:text-red-700 p-0">
+                    Investigate <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
                 </CardContent>
               </Card>
             </div>
@@ -126,7 +152,7 @@ export default function HomePage() {
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-4">How Much Sleep Are You Losing?</h2>
             <p className="text-xl mb-8 text-gray-600 max-w-2xl mx-auto">Use our Sleep Calculator to see the impact of your sleep habits and get personalized recommendations.</p>
-            <Button size="lg" className="bg-gray-900 text-white hover:bg-gray-800 transition-colors">
+            <Button size="lg" className="bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
               Try the Sleep Calculator
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
