@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Brain, Moon, Sun, Activity, Clock, Trophy, Scale, AlertCircle, Heart, Shield, Cloud } from 'lucide-react'
+import Link from 'next/link'
 
 export default function WhatIsSleepPage() {
   return (
@@ -445,13 +446,17 @@ export default function WhatIsSleepPage() {
             <p className="text-xl mb-8 text-gray-200">
               Explore what happens when we don't get enough sleep and how it affects our health.
             </p>
-            <Button className="bg-gradient-to-r from-[#4A90E2] to-[#67B8FF] text-white 
-              hover:from-[#60A5F7] hover:to-[#89CDFF] 
-              transition-all duration-300 transform hover:scale-105 
-              shadow-[0_0_25px_rgba(74,144,226,0.5)] 
-              hover:shadow-[0_0_35px_rgba(74,144,226,0.7)]">
-              Discover the Consequences
-            </Button>
+            <Link href="/sleep-deprivation-effects">
+              <Button 
+                className="bg-gradient-to-r from-[#4A90E2] to-[#67B8FF] text-white 
+                  hover:from-[#60A5F7] hover:to-[#89CDFF] 
+                  transition-all duration-300 transform hover:scale-105 
+                  shadow-[0_0_25px_rgba(74,144,226,0.5)] 
+                  hover:shadow-[0_0_35px_rgba(74,144,226,0.7)]"
+              >
+                Discover the Consequences
+              </Button>
+            </Link>
           </div>
         </section>
       </main>
