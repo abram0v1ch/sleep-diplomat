@@ -13,10 +13,10 @@ export default function WhatIsSleepPage() {
           <div className="flex items-center justify-between h-16">
             <a className="text-xl font-semibold text-gray-100">Sleep Diplomat</a>
             <nav className="hidden md:flex space-x-8">
-              <a href="/" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">Home</a>
-              <a href="#" className="text-sm font-medium text-[#67B8FF] hover:text-[#89CDFF] transition-colors">What is Sleep?</a>
-              <a href="/sleep-deprivation-effects" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">Effects of Sleep Deprivation</a>
-              <a href="/calculator" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">Sleep Deprivation Calculator</a>
+              <Link href="/" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">Home</Link>
+              <Link href="#" className="text-sm font-medium text-[#67B8FF] hover:text-[#89CDFF] transition-colors">What is Sleep?</Link>
+              <Link href="/sleep-deprivation-effects" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">Effects of Sleep Deprivation</Link>
+              <Link href="/calculator" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">Sleep Deprivation Calculator</Link>
             </nav>
           </div>
         </div>
@@ -34,7 +34,7 @@ export default function WhatIsSleepPage() {
             </h1>
             <p className="text-xl mb-8 text-gray-200">
               Sleep is a natural, periodic state of rest for the mind and body, characterized by altered consciousness, 
-              reduced sensory activity, and decreased voluntary muscle movement. It's an essential biological process 
+              reduced sensory activity, and decreased voluntary muscle movement. It&apos;s an essential biological process 
               that is crucial for your mental and physical well-being.
             </p>
           </div>
@@ -206,7 +206,7 @@ export default function WhatIsSleepPage() {
                         <div>
                           <h5 className="text-white font-medium mb-2">Rapid Eye Movement</h5>
                           <p className="text-gray-200 leading-relaxed mb-4">
-                            During REM sleep, your brain becomes highly active, with brain wave patterns similar to when you're awake. This stage is most famous for vivid dreaming, where your brain creates rich, story-like experiences while your body remains in a state of temporary paralysis to prevent acting out these dreams.
+                            During REM sleep, your brain becomes highly active, with brain wave patterns similar to when you&apos;re awake. This stage is most famous for vivid dreaming, where your brain creates rich, story-like experiences while your body remains in a state of temporary paralysis to prevent acting out these dreams.
                           </p>
                         </div>
                       </div>
@@ -370,7 +370,7 @@ export default function WhatIsSleepPage() {
                   <CardContent>
                     <div className="space-y-4">
                       <p className="text-gray-200">
-                        Lack of REM sleep can make individuals 60% more emotionally reactive, as the brain's amygdala becomes overactive without the emotional regulation benefits provided by REM sleep.
+                        Lack of REM sleep can make individuals 60% more emotionally reactive, as the brain&apos;s amygdala becomes overactive without the emotional regulation benefits provided by REM sleep.
                       </p>
                       <div className="flex items-center gap-2 mt-2">
                         <div className="px-3 py-1 rounded-full bg-[#1B2C4F] text-[#67B8FF] text-sm">
@@ -444,7 +444,7 @@ export default function WhatIsSleepPage() {
               Ready to Learn More?
             </h2>
             <p className="text-xl mb-8 text-gray-200">
-              Explore what happens when we don't get enough sleep and how it affects our health.
+              Explore what happens when we don&apos;t get enough sleep and how it affects our health.
             </p>
             <Link href="/sleep-deprivation-effects">
               <Button 

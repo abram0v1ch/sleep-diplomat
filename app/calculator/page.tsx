@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { Moon, Sun, AlertTriangle, Brain, Heart, Coffee } from 'lucide-react'
+import { Moon, Sun, AlertTriangle, Brain, Heart, Coffee, Link } from 'lucide-react'
 
 interface CalculatedResults {
   recommendedSleep: number
@@ -122,18 +122,18 @@ export default function SleepCalculatorPage() {
           <div className="flex items-center justify-between h-16">
             <a className="text-xl font-semibold text-gray-100">Sleep Diplomat</a>
             <nav className="hidden md:flex space-x-8">
-              <a href="/" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
+              <Link href="/" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
                 Home
-              </a>
-              <a href="/what-is-sleep" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
+              </Link>
+              <Link href="/what-is-sleep" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
                 What is Sleep?
-              </a>
-              <a href="/sleep-deprivation-effects" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
+              </Link>
+              <Link href="/sleep-deprivation-effects" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
                 Effects of Sleep Deprivation
-              </a>
-              <a href="/calculator" className="text-sm font-medium text-[#67B8FF] hover:text-[#89CDFF] transition-colors">
+              </Link>
+              <Link href="/calculator" className="text-sm font-medium text-[#67B8FF] hover:text-[#89CDFF] transition-colors">
                 Sleep Deprivation Calculator
-              </a>
+              </Link>
             </nav>
           </div>
         </div>

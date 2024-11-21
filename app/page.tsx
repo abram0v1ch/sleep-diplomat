@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Brain, Coffee, ChevronRight, Moon } from 'lucide-react'
+import { Brain, Coffee, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
 export default function HomePage() {

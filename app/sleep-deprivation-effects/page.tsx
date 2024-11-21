@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Clock, Activity, AlertTriangle, Brain, Heart, Coffee, Frown, ChevronRight, Shield, Car, Hospital } from 'lucide-react'
+import { Clock, AlertTriangle, Brain, Heart, Frown, ChevronRight, Shield, Car, Hospital } from 'lucide-react'
 import Link from 'next/link'
 
 export default function EffectsOfSleepDeprivationPage() {
@@ -13,10 +13,10 @@ export default function EffectsOfSleepDeprivationPage() {
           <div className="flex items-center justify-between h-16">
             <a className="text-xl font-semibold text-gray-100">Sleep Diplomat</a>
             <nav className="hidden md:flex space-x-8">
-              <a href="/" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Home</a>
-              <a href="/what-is-sleep" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">What is Sleep?</a>
-              <a href="#" className="text-sm font-medium text-[#67B8FF] hover:text-[#4A90E2] transition-colors">Effects of Sleep Deprivation</a>
-              <a href="/calculator" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Sleep Deprivation Calculator</a>
+              <Link href="/" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Home</Link>
+              <Link href="/what-is-sleep" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">What is Sleep?</Link>
+              <Link href="#" className="text-sm font-medium text-[#67B8FF] hover:text-[#4A90E2] transition-colors">Effects of Sleep Deprivation</Link>
+              <Link href="/calculator" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">Sleep Deprivation Calculator</Link>
             </nav>
           </div>
         </div>
@@ -94,8 +94,8 @@ export default function EffectsOfSleepDeprivationPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <p className="text-gray-200">
-                    Sleep deprivation affects your brain's ability to concentrate and react quickly. Psychomotor 
-                    Vigilance Tasks (PVT) show a dramatic increase in 'lapses' or micro-sleeps when participants 
+                    Sleep deprivation affects your brain&apos;s ability to concentrate and react quickly. Psychomotor 
+                    Vigilance Tasks (PVT) show a dramatic increase in &apos;lapses&apos; or micro-sleeps when participants 
                     are sleep-deprived.
                   </p>
                   
@@ -147,7 +147,7 @@ export default function EffectsOfSleepDeprivationPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <p className="text-gray-200">
-                    Sleep deprivation doesn't just make you feel tired. Over time, it increases the risk of chronic 
+                    Sleep deprivation doesn&apos;t just make you feel tired. Over time, it increases the risk of chronic 
                     diseases like cancer, Type II diabetes, and heart disease. It also impairs glucose metabolism, 
                     contributing to weight gain.
                   </p>
@@ -338,7 +338,7 @@ export default function EffectsOfSleepDeprivationPage() {
                 <CardHeader>
                   <CardTitle className="night-card-title">
                     <Clock className="w-6 h-6 mr-2 text-[#67B8FF]" />
-                    Peter Tripp's Record-breaking Wakeathon
+                    Peter Tripp&apos;s Record-breaking Wakeathon
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -438,7 +438,7 @@ export default function EffectsOfSleepDeprivationPage() {
                 <CardContent className="space-y-6">
                   <p className="text-gray-200">
                     Medical interns working 30-hour shifts are prone to 170% more road accidents and a 460% increase 
-                    in diagnostic errors in the ICU. Chronic sleep loss isn't just inconvenient—it's dangerous.
+                    in diagnostic errors in the ICU. Chronic sleep loss isn&apos;t just inconvenient—it&apos;s dangerous.
                   </p>
 
                   {/* Shift Duration Impact */}
@@ -618,7 +618,7 @@ export default function EffectsOfSleepDeprivationPage() {
                       <div className="space-y-2">
                         <p className="text-sm font-medium text-red-400">High-Risk Hours</p>
                         <p className="text-sm text-gray-200">
-                          The risk is highest between 2 AM and 6 AM, when the body's circadian rhythm is at its lowest point. 
+                          The risk is highest between 2 AM and 6 AM, when the body&apos;s circadian rhythm is at its lowest point. 
                           Night shift workers are particularly vulnerable during their commute home.
                         </p>
                       </div>
