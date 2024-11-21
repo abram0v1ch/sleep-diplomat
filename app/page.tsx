@@ -18,7 +18,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between h-16">
             <a className="text-xl font-semibold text-gray-100">Sleep Diplomat</a>
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-sm font-medium text-blue-600 hover:text-gray-100 transition-colors">Home</a>
+              <a href="#" className="text-sm font-medium text-[#67B8FF] hover:text-[#89CDFF] transition-colors">Home</a>
               <a href="/what-is-sleep" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">What is Sleep?</a>
               <a href="/sleep-deprivation-effects" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">Effects of Sleep Deprivation</a>
               <a href="/calculator" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">Sleep Deprivation Calculator</a>
