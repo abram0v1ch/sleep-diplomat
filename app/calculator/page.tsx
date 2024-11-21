@@ -115,163 +115,285 @@ export default function SleepCalculatorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white text-gray-900">
-      <header className="bg-white shadow-sm">
+    <div className="min-h-screen bg-[#0a192f] text-gray-100">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a192f]/80 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <a href="/" className="text-xl font-semibold text-gray-900">SleepWise</a>
+            <a href="/" className="text-xl font-semibold text-gray-100">Sleep Diplomat</a>
             <nav className="hidden md:flex space-x-8">
-              <a href="/" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">Home</a>
-              <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">Science of Sleep</a>
-              <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">Effects</a>
-              <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">Calculator</a>
+              <a href="/" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
+                Home
+              </a>
+              <a href="/what-is-sleep" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
+                What is Sleep?
+              </a>
+              <a href="/sleep-deprivation-effects" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
+                Effects of Sleep Deprivation
+              </a>
+              <a href="/calculator" className="text-sm font-medium text-[#67B8FF] hover:text-[#89CDFF] transition-colors">
+                Sleep Deprivation Calculator
+              </a>
             </nav>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8 text-center">Sleep Calculator</h1>
-        
-        <div className="grid md:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Calculate Your Sleep Pattern</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <Label htmlFor="age">Age</Label>
-                  <Input
-                    id="age"
-                    type="number"
-                    value={age}
-                    onChange={(e) => setAge(Number(e.target.value))}
-                    min="1"
-                    max="120"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="weekdaySleep">Average Weekday Sleep (hours)</Label>
-                  <div className="flex items-center space-x-4">
-                    <Moon className="text-blue-500" />
-                    <Slider
-                      id="weekdaySleep"
-                      min={0}
-                      max={12}
-                      step={0.5}
-                      value={[weekdaySleep]}
-                      onValueChange={(value) => setWeekdaySleep(value[0])}
-                    />
-                    <Sun className="text-yellow-500" />
-                    <span>{weekdaySleep} hours</span>
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="weekendSleep">Average Weekend Sleep (hours)</Label>
-                  <div className="flex items-center space-x-4">
-                    <Moon className="text-blue-500" />
-                    <Slider
-                      id="weekendSleep"
-                      min={0}
-                      max={12}
-                      step={0.5}
-                      value={[weekendSleep]}
-                      onValueChange={(value) => setWeekendSleep(value[0])}
-                    />
-                    <Sun className="text-yellow-500" />
-                    <span>{weekendSleep} hours</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      {/* Hero Section */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="stars absolute inset-0 opacity-50"></div>
+          <div className="crescent-moon absolute top-10 right-20"></div>
+        </div>
+        <div className="text-center z-10 max-w-4xl mx-auto px-4">
+          <h1 className="text-5xl font-bold mb-8 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
+            Sleep Deprivation Calculator
+          </h1>
+          <p className="text-xl mb-8 text-gray-200">
+            Understand your sleep patterns and discover how they might be affecting your health. 
+          </p>
+        </div>
+      </section>
 
-          {calculatedResults && (
-            <Card>
+      {/* Calculator Section */}
+      <section className="py-24 bg-[#112240]">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl font-semibold mb-12 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
+            Enter your details below to calculate your sleep debt or surplus.
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="night-card">
               <CardHeader>
-                <CardTitle>Your Sleep Results</CardTitle>
+                <CardTitle className="night-card-title">
+                  <Moon className="w-6 h-6 mr-2 text-[#67B8FF]" />
+                  Calculate Your Sleep Pattern
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="mb-4">Based on your age, your recommended sleep is {calculatedResults.recommendedSleep} hours per night.</p>
-                <p className="mb-4">Your average sleep: {calculatedResults.averageSleep.toFixed(1)} hours per night.</p>
-                <div className="space-y-4">
-                  {calculatedResults.weeklyDebt > 0 && (
-                    <div className="flex items-center space-x-2">
-                      <AlertTriangle className="text-yellow-500" />
-                      <span>Weekly Sleep Debt: {calculatedResults.weeklyDebt.toFixed(1)} hours</span>
+                <div className="space-y-8">
+                  <div>
+                    <Label htmlFor="age" className="text-gray-200">Age</Label>
+                    <Input
+                      id="age"
+                      type="number"
+                      value={age}
+                      onChange={(e) => setAge(Number(e.target.value))}
+                      min="1"
+                      max="120"
+                      className="bg-[#1B2C4F] border-[#243B67] text-gray-100 focus:ring-[#67B8FF] focus:border-[#67B8FF]"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="weekdaySleep" className="text-gray-200">Average Weekday Sleep (hours)</Label>
+                    <div className="flex items-center space-x-4 mt-2">
+                      <Moon className="text-[#67B8FF]" />
+                      <Slider
+                        id="weekdaySleep"
+                        min={0}
+                        max={12}
+                        step={0.5}
+                        value={[weekdaySleep]}
+                        onValueChange={(value) => setWeekdaySleep(value[0])}
+                        className="flex-1 [&_[role=slider]]:!bg-[#67B8FF] [&_[role=slider]]:!border-[#67B8FF] [&_.relative_.range-slider]:!bg-[#67B8FF] [&_.relative_.bg-primary]:!bg-[#243B67]"
+                      />
+                      <Sun className="text-[#67B8FF]" />
+                      <span className="min-w-[4rem] text-right text-[#67B8FF] font-medium">
+                        {weekdaySleep} hrs
+                      </span>
                     </div>
-                  )}
-                  {calculatedResults.weeklyOverslept > 0 && (
-                    <div className="flex items-center space-x-2">
-                      <AlertTriangle className="text-blue-500" />
-                      <span>Weekly Oversleep: {calculatedResults.weeklyOverslept.toFixed(1)} hours</span>
+                  </div>
+                  <div>
+                    <Label htmlFor="weekendSleep" className="text-gray-200">Average Weekend Sleep (hours)</Label>
+                    <div className="flex items-center space-x-4 mt-2">
+                      <Moon className="text-[#67B8FF]" />
+                      <Slider
+                        id="weekendSleep"
+                        min={0}
+                        max={12}
+                        step={0.5}
+                        value={[weekendSleep]}
+                        onValueChange={(value) => setWeekendSleep(value[0])}
+                        className="flex-1 [&_[role=slider]]:!bg-[#67B8FF] [&_[role=slider]]:!border-[#67B8FF] [&_.relative_.range-slider]:!bg-[#67B8FF] [&_.relative_.bg-primary]:!bg-[#243B67]"
+                      />
+                      <Sun className="text-[#67B8FF]" />
+                      <span className="min-w-[4rem] text-right text-[#67B8FF] font-medium">
+                        {weekendSleep} hrs
+                      </span>
                     </div>
-                  )}
+                  </div>
                 </div>
-                {calculatedResults.weeklyDebt > 0 ? (
-                  <div className="mt-6 p-4 bg-yellow-100 rounded-md">
-                    <p className="text-yellow-800">
-                      You're accumulating sleep debt. Consider adjusting your sleep schedule to get closer to the recommended amount of sleep for your age group.
-                    </p>
-                  </div>
-                ) : calculatedResults.weeklyOverslept > 0 ? (
-                  <div className="mt-6 p-4 bg-blue-100 rounded-md">
-                    <p className="text-blue-800">
-                      You're sleeping more than the recommended amount. While extra sleep can sometimes be beneficial, consistently oversleeping may have negative effects.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="mt-6 p-4 bg-green-100 rounded-md">
-                    <p className="text-green-800">
-                      Great job! You're getting the right amount of sleep according to the general recommendations for your age group.
-                    </p>
-                  </div>
-                )}
               </CardContent>
             </Card>
-          )}
-        </div>
 
-        {calculatedResults && (
-          <section className="mt-12">
-            <h2 className="text-3xl font-semibold mb-6">Potential Effects of Your Sleep Pattern</h2>
+            {calculatedResults && (
+              <Card className="night-card">
+                <CardHeader>
+                  <CardTitle className="night-card-title">
+                    <Brain className="w-6 h-6 mr-2 text-[#67B8FF]" />
+                    Your Sleep Results
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div className="p-4 bg-[#1B2C4F] rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-gray-300">Recommended Sleep</span>
+                        <span className="text-2xl font-bold text-[#67B8FF]">
+                          {calculatedResults.recommendedSleep}h
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-300">Your Average</span>
+                        <span className="text-2xl font-bold text-white">
+                          {calculatedResults.averageSleep.toFixed(1)}h
+                        </span>
+                      </div>
+                    </div>
+
+                    {calculatedResults.weeklyDebt > 0 && (
+                      <div className="p-4 bg-[#1B2C4F] rounded-lg border border-yellow-500/20">
+                        <div className="flex items-start space-x-3">
+                          <AlertTriangle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-1" />
+                          <div>
+                            <p className="text-yellow-500 font-medium">Sleep Debt Alert</p>
+                            <p className="text-gray-300">Weekly: {calculatedResults.weeklyDebt.toFixed(1)}h</p>
+                            <p className="text-gray-300">Monthly: {calculatedResults.monthlyDebt.toFixed(1)}h</p>
+                            <p className="text-gray-300">Yearly: {calculatedResults.yearlyDebt.toFixed(1)}h</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {calculatedResults.weeklyOverslept > 0 && (
+                      <div className="p-4 bg-[#1B2C4F] rounded-lg border border-blue-500/20">
+                        <div className="flex items-start space-x-3">
+                          <AlertTriangle className="w-5 h-5 text-[#67B8FF] flex-shrink-0 mt-1" />
+                          <div>
+                            <p className="text-[#67B8FF] font-medium">Excess Sleep Pattern</p>
+                            <p className="text-gray-300">Weekly: {calculatedResults.weeklyOverslept.toFixed(1)}h</p>
+                            <p className="text-gray-300">Monthly: {calculatedResults.monthlyOverslept.toFixed(1)}h</p>
+                            <p className="text-gray-300">Yearly: {calculatedResults.yearlyOverslept.toFixed(1)}h</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Effects Section */}
+      {calculatedResults && (
+        <section className="py-24 bg-[#0a192f]">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-3xl font-semibold mb-12 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
+              Potential Effects of Your Sleep Pattern
+            </h2>
             <div className="grid md:grid-cols-3 gap-8">
               {(['immediate', 'shortTerm', 'longTerm'] as const).map((timeframe) => (
-                <Card key={timeframe}>
+                <Card key={timeframe} className="bg-[#112240] border-none shadow-lg shadow-black/20">
                   <CardHeader>
-                    <CardTitle className="flex items-center text-lg">
-                      {timeframe === 'immediate' && <Coffee className="w-5 h-5 mr-2 text-yellow-500" />}
-                      {timeframe === 'shortTerm' && <Brain className="w-5 h-5 mr-2 text-blue-500" />}
-                      {timeframe === 'longTerm' && <Heart className="w-5 h-5 mr-2 text-red-500" />}
+                    <CardTitle className="text-gray-100 flex items-center text-lg">
+                      {timeframe === 'immediate' && <Coffee className="w-5 h-5 mr-2 text-[#67B8FF]" />}
+                      {timeframe === 'shortTerm' && <Brain className="w-5 h-5 mr-2 text-[#67B8FF]" />}
+                      {timeframe === 'longTerm' && <Heart className="w-5 h-5 mr-2 text-[#67B8FF]" />}
                       {timeframe === 'immediate' ? 'Immediate' : timeframe === 'shortTerm' ? 'Short-term' : 'Long-term'} Effects
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ul className="list-disc pl-5 space-y-2">
+                    <ul className="space-y-3">
                       {getRelevantEffects(getSleepStatus(calculatedResults.averageSleep, calculatedResults.recommendedSleep))[timeframe]?.map((effect, index) => (
-                        <li key={index}>{effect}</li>
+                        <li key={index} className="flex items-start space-x-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                          <span className="text-gray-300">{effect}</span>
+                        </li>
                       ))}
                     </ul>
                   </CardContent>
                 </Card>
               ))}
             </div>
-          </section>
-        )}
-
-        <section className="mt-12 text-center">
-          <h2 className="text-3xl font-semibold mb-6">Understanding Your Sleep Pattern</h2>
-          <p className="text-lg mb-6">
-            Your sleep pattern is the difference between your actual sleep and the recommended amount for your age group. 
-            Both insufficient sleep and excessive sleep can have impacts on your health and well-being.
-          </p>
+          </div>
         </section>
-      </main>
+      )}
 
-      <footer className="bg-gray-100 py-8 text-center text-gray-600 mt-12">
-        <div className="container mx-auto px-4">
-          <p>&copy; 2023 SleepWise. All rights reserved.</p>
+      {/* Recommendations Section */}
+      {calculatedResults && (
+        <section className="py-24 bg-[#112240]">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-3xl font-semibold mb-12 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
+              Sleep Recommendations
+            </h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              <Card className="bg-[#1B2C4F] border-none shadow-lg shadow-black/20">
+                <CardHeader>
+                  <CardTitle className="text-gray-100 flex items-center">
+                    <Moon className="w-6 h-6 mr-2 text-[#67B8FF]" />
+                    Healthy Sleep Tips
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    <li className="flex items-start space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                      <span className="text-gray-300">Maintain a consistent sleep schedule</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                      <span className="text-gray-300">Create a relaxing bedtime routine</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                      <span className="text-gray-300">Optimize your sleep environment</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                      <span className="text-gray-300">Limit screen time before bed</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-[#1B2C4F] border-none shadow-lg shadow-black/20">
+                <CardHeader>
+                  <CardTitle className="text-gray-100 flex items-center">
+                    <AlertTriangle className="w-6 h-6 mr-2 text-[#67B8FF]" />
+                    What to Avoid
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-3">
+                    <li className="flex items-start space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                      <span className="text-gray-300">Caffeine late in the day</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                      <span className="text-gray-300">Irregular sleep patterns</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                      <span className="text-gray-300">Long daytime naps</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                      <span className="text-gray-300">Heavy meals before bedtime</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Footer */}
+      <footer className="bg-[#0a192f] py-8 text-center text-gray-400">
+        <div className="max-w-7xl mx-auto px-4">
+          <p>&copy; {new Date().getFullYear()} Sleep Diplomat. All rights reserved.</p>
         </div>
       </footer>
     </div>
