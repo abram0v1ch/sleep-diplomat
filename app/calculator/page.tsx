@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { Moon, Sun, AlertTriangle, Brain, Heart, Coffee, Link } from 'lucide-react'
+import { Moon, Sun, AlertTriangle, Brain, Heart, Coffee } from 'lucide-react'
+import Link from 'next/link'
 
 interface CalculatedResults {
   recommendedSleep: number
