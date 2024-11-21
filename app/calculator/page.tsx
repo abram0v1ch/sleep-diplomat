@@ -120,7 +120,7 @@ export default function SleepCalculatorPage() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a192f]/80 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <a href="/" className="text-xl font-semibold text-gray-100">Sleep Diplomat</a>
+            <a className="text-xl font-semibold text-gray-100">Sleep Diplomat</a>
             <nav className="hidden md:flex space-x-8">
               <a href="/" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
                 Home
