@@ -113,32 +113,22 @@ export default function SleepCalculatorPage() {
   const [calculatedResults, setCalculatedResults] = useState<CalculatedResults | null>(null)
 
   useEffect(() => {
-    calculateSleepDebt()
-  }, [duration, weekdaySleep, weekendSleep, age])
+    const rawDebt = (8 - weekdaySleep) * 7 * duration;
+    const finalDebt = Math.max(0, rawDebt);
+    console.log('Sleep debt calculation:', {
+      weekdaySleep,
+      duration,
+      rawDebt,
+      finalDebt,
+      formula: `max(0, (8 - ${weekdaySleep}) * 7 * ${duration}) = ${finalDebt}`
+    });
+    setCalculatedResults({ weeklyDebt: finalDebt });
+  }, [weekdaySleep, duration]);
 
-  const calculateSleepDebt = () => {
-    let recommendedSleep
-    if (age <= 13) recommendedSleep = 11
-    else if (age <= 18) recommendedSleep = 10
-    else if (age <= 64) recommendedSleep = 8
-    else recommendedSleep = 7
-
-    const weekdayDiff = recommendedSleep - weekdaySleep
-    const weekendDiff = recommendedSleep - weekendSleep
-    const totalWeeklyDiff = (weekdayDiff * 5) + (weekendDiff * 2)
-
-    const weeklyDebt = Math.max(totalWeeklyDiff, 0)
-    const weeklyOverslept = Math.max(-totalWeeklyDiff, 0)
-
-    setCalculatedResults({
-      weeklyDebt,
-      monthlyDebt: weeklyDebt * 4,
-      monthlyOverslept: weeklyOverslept * 4,
-      yearlyDebt: weeklyDebt * 52,
-      yearlyOverslept: weeklyOverslept * 52,
-      averageSleep: (weekdaySleep * 5 + weekendSleep * 2) / 7
-    })
-  }
+  const calculateSleepDebt = (weekdaySleep: number, durationWeeks: number): number => {
+    const debt = (8 - weekdaySleep) * 7 * durationWeeks;
+    return Math.max(0, debt);
+  };
 
   const getSleepStatus = (averageSleep: number, recommendedSleep: number) => {
     const diff = averageSleep - recommendedSleep
@@ -199,6 +189,92 @@ export default function SleepCalculatorPage() {
     }
     return effects[status]
   }
+
+  const getSleepDeprivationEffects = (sleepDebt: number) => {
+    if (sleepDebt === 0) {
+      return {
+        emojis: ['😊', '✨', '💪'],
+        message: {
+          mainEffect: "You're getting enough sleep!",
+          details: [
+            "Keep maintaining this healthy sleep schedule.",
+            "Your body and mind are getting the rest they need.",
+            "This helps maintain optimal cognitive and physical performance."
+          ]
+        }
+      };
+    } else if (sleepDebt <= 10) {
+      return {
+        emojis: ['🥱', '🧠', '⚡'],
+        message: {
+          mainEffect: "Mild drowsiness and slower thinking.",
+          details: [
+            "You may notice slight memory issues and reduced ability to stay alert.",
+            "You are more prone to errors and struggle to stay focused, making it difficult to perform routine activities effectively."
+          ]
+        }
+      };
+    } else if (sleepDebt <= 20) {
+      return {
+        emojis: ['💔', '😫', '🦠'],
+        message: {
+          mainEffect: "You feel fatigued and irritable.",
+          details: [
+            "Your immune system is weakened, making you more susceptible to colds and infections.",
+            "Emotional regulation becomes harder, resulting in increased anxiety, irritability, and mood swings."
+          ]
+        }
+      };
+    } else if (sleepDebt <= 30) {
+      return {
+        emojis: ['🥴', '💊', '🍟'],
+        message: {
+          mainEffect: "Your cognitive ability will be 30% slower, and your decision-making capacity significantly drops.",
+          details: [
+            "Cravings for unhealthy, calorie-dense food increase due to hormonal imbalances, making weight management more difficult."          ]
+        }
+      };
+    } else if (sleepDebt <= 40) {
+      return {
+        emojis: ['💔', '🍟', '🦠', '💊', '🥴'],
+        message: {
+          mainEffect: "You are functioning similarly to someone who has been awake for multiple consecutive nights.",
+          details: [
+            "Cognitive performance is severely impaired, with reduced memory recall and difficulty focusing. ", 
+            "Your immune system's response is weakened, making you more susceptible to infections and illnesses.", 
+            "Hormonal imbalances result in strong cravings for high-calorie and unhealthy foods, leading to weight gain.", 
+            "Emotional regulation becomes challenging, causing irritability, mood swings, and reduced resilience to stress.", 
+            "These effects, if prolonged, increase the risk of more serious conditions, such as cardiovascular issues, type 2 diabetes, and anxiety disorders."
+          ]
+        }
+      };
+    } else if (sleepDebt <= 50) {
+      return {
+        emojis: ['🥵', '💥', '🧠', '💊'],
+        message: {
+          mainEffect: "Severe cognitive impairment, confusion, and significant emotional instability. ",
+          details: [
+            "You may experience microsleeps, putting you at risk of accidents.", 
+            "You are also at an increased risk of chronic health conditions, including hypertension, diabetes, and weakened cardiac health.", 
+            "Expect persistent fatigue, difficulty in performing basic tasks, and impaired judgment that can impact your day-to-day safety."
+          ]
+        }
+      };
+    } else {
+      return {
+        emojis: ['🤯 ', '🛑', '💔','🧟‍♂️'],
+        message: {
+          mainEffect: "Critical sleep debt!",
+          details: [
+            "Your physical health is in a serious decline.", 
+            "Chronic stress levels are damaging your heart and overall health.", 
+            "You may experience hallucinations, paranoia, or extreme mental fatigue similar to the symptoms experienced by Peter Tripp during his record-breaking wakeathon.", 
+            "Immediate medical intervention may be necessary to prevent long-term damage or fatal consequences."
+          ]
+        }
+      };
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0a192f] text-gray-100">
@@ -345,11 +421,15 @@ export default function SleepCalculatorPage() {
                   {calculatedResults && (
                     <div className="space-y-4 mt-8">
                       <p>You have {calculatedResults.weeklyDebt.toFixed(1)} hours of sleep debt</p>
-                      <p>You function the same as a person who hasn't slept for 3 days straight</p>
-                      <p>Your cognitive ability will be 1.5x slower,</p>
-                      <p>your immune response will be 3.1x weaker. You will catch more colds and will be less productive.</p>
-                      <p>you will crave unhealthy food and will gain weight</p>
-                      <p>You will need to sleep 2 more hours a day for 3 months straight to remove your sleep debt</p>
+                      <p>{getSleepDeprivationEffects(calculatedResults.weeklyDebt).message.mainEffect}</p>
+                      {getSleepDeprivationEffects(calculatedResults.weeklyDebt).message.details.map((detail, index) => (
+                        <p key={`detail-${index}`}>{detail}</p>
+                      ))}
+                      {calculatedResults.weeklyDebt > 0 && (
+                        <p>
+                          You will need to sleep {Math.ceil(calculatedResults.weeklyDebt / 7)} more hours a day for {Math.ceil(calculatedResults.weeklyDebt * 2 / 7)} weeks straight to remove your sleep debt
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
