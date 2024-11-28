@@ -10,30 +10,53 @@ import Link from 'next/link'
 import styled from 'styled-components';
 
 interface CalculatedResults {
-  recommendedSleep: number
-  weeklyDebt: number
-  weeklyOverslept: number
-  monthlyDebt: number
-  monthlyOverslept: number
-  yearlyDebt: number
-  yearlyOverslept: number
-  averageSleep: number
+  weeklyDebt: number;
 }
 
-const VisualizationSection = styled.div`
-  flex: 1;
-  position: relative;
-  height: 600px;
+const FlexContainer = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  gap: 2rem;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const OrbitalSection = styled.div`
+  width: 50%;
+  min-width: 300px;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 400px;
+  }
 `;
 
 const OrbitalSystem = styled.div`
   position: relative;
-  width: 500px;
-  height: 500px;
-  margin-right: 2rem;
+  width: 100%;
+  padding-bottom: 100%; // Makes it square
+`;
+
+const OrbitalContent = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
+const Orbit = styled.div`
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: ${props => `${props.size}%`};
+  height: ${props => `${props.size}%`};
 `;
 
 const OrbitPath = styled.div`
@@ -41,8 +64,8 @@ const OrbitPath = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
+  width: ${props => `${props.size}%`};
+  height: ${props => `${props.size}%`};
   animation: rotate ${props => props.duration}s linear infinite;
 
   @keyframes rotate {
@@ -62,24 +85,24 @@ const OrbitItem = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const FlexContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  padding: 2rem;
+const ResultsContainer = styled.div`
+  background: rgba(27, 44, 79, 0.5); // Slightly transparent dark blue
   border-radius: 1rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  margin-top: 1rem;
 `;
 
-const Orbit = styled.div`
-  position: absolute;
+const ContentBlock = styled.div`
+  background: rgba(27, 44, 79, 0.5);
+  border-radius: 1rem;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
+  width: 100%;
+  color: #fff;
 `;
 
 export default function SleepCalculatorPage() {
@@ -108,9 +131,7 @@ export default function SleepCalculatorPage() {
     const weeklyOverslept = Math.max(-totalWeeklyDiff, 0)
 
     setCalculatedResults({
-      recommendedSleep,
       weeklyDebt,
-      weeklyOverslept,
       monthlyDebt: weeklyDebt * 4,
       monthlyOverslept: weeklyOverslept * 4,
       yearlyDebt: weeklyDebt * 52,
@@ -224,105 +245,115 @@ export default function SleepCalculatorPage() {
       <section className="py-24 bg-[#112240]">
         <div className="max-w-7xl mx-auto px-4">
           <FlexContainer>
-            {/* Visualization on the left */}
-            <VisualizationSection>
+            <OrbitalSection>
               <OrbitalSystem>
-                {/* Center emoji */}
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-                  <span style={{ fontSize: '100px' }}>
-                    {calculatedResults?.weeklyDebt > 0 ? '🫠' : '😊'}
-                  </span>
-                </div>
-                
-                {/* Static orbit circles */}
-                <Orbit size={300} />
-                <Orbit size={400} />
-                <Orbit size={500} />
-                
-                {/* Rotating paths with emojis */}
-                <OrbitPath size={300} duration={15}>
-                  <OrbitItem>
-                    <span style={{ fontSize: '24px' }}>🦠</span>
-                  </OrbitItem>
-                </OrbitPath>
+                <OrbitalContent>
+                  {/* Center emoji */}
+                  <div style={{ 
+                    position: 'absolute', 
+                    top: '50%', 
+                    left: '50%', 
+                    transform: 'translate(-50%, -50%)'
+                  }}>
+                    <span style={{ fontSize: 'min(10vw, 100px)' }}>
+                      {calculatedResults?.weeklyDebt > 0 ? '🫠' : '😊'}
+                    </span>
+                  </div>
 
-                <OrbitPath size={400} duration={20}>
-                  <OrbitItem>
-                    <span style={{ fontSize: '24px' }}>🍟</span>
-                  </OrbitItem>
-                </OrbitPath>
+                  {/* Orbits */}
+                  <Orbit size={60} />  {/* 300px / 500px * 100 = 60% */}
+                  <Orbit size={80} />  {/* 400px / 500px * 100 = 80% */}
+                  <Orbit size={100} /> {/* 500px / 500px * 100 = 100% */}
 
-                <OrbitPath size={400} duration={20} style={{ animationDelay: '-10s' }}>
-                  <OrbitItem>
-                    <span style={{ fontSize: '24px' }}>💔</span>
-                  </OrbitItem>
-                </OrbitPath>
+                  {/* Orbital items with percentage-based paths */}
+                  <OrbitPath size={60} duration={15}>
+                    <OrbitItem>
+                      <span style={{ fontSize: 'min(3vw, 24px)' }}>🦠</span>
+                    </OrbitItem>
+                  </OrbitPath>
 
-                <OrbitPath size={500} duration={25}>
-                  <OrbitItem>
-                    <span style={{ fontSize: '24px' }}>💊</span>
-                  </OrbitItem>
-                </OrbitPath>
+                  <OrbitPath size={80} duration={20}>
+                    <OrbitItem>
+                      <span style={{ fontSize: 'min(3vw, 24px)' }}>🍟</span>
+                    </OrbitItem>
+                  </OrbitPath>
+
+                  <OrbitPath size={80} duration={20} style={{ animationDelay: '-10s' }}>
+                    <OrbitItem>
+                      <span style={{ fontSize: 'min(3vw, 24px)' }}>💔</span>
+                    </OrbitItem>
+                  </OrbitPath>
+
+                  <OrbitPath size={100} duration={25}>
+                    <OrbitItem>
+                      <span style={{ fontSize: 'min(3vw, 24px)' }}>💊</span>
+                    </OrbitItem>
+                  </OrbitPath>
+                </OrbitalContent>
               </OrbitalSystem>
-            </VisualizationSection>
+            </OrbitalSection>
 
-            {/* Sleep debt calculations on the right */}
-            <div className="flex-1 p-6 rounded-lg">
-              <div className="space-y-6">
-                <div>
-                  <Label htmlFor="weekdaySleep" className="text-gray-200">Average Weekday Sleep (hours)</Label>
-                  <div className="flex items-center space-x-4 mt-2">
-                    <Moon className="text-[#67B8FF]" />
-                    <Slider
-                      id="weekdaySleep"
-                      min={0}
-                      max={12}
-                      step={0.5}
-                      value={[weekdaySleep]}
-                      onValueChange={(value) => setWeekdaySleep(value[0])}
-                      className="flex-1 [&_[role=slider]]:!bg-[#67B8FF]"
-                    />
-                    <Sun className="text-[#67B8FF]" />
-                    <span className="min-w-[4rem] text-right text-[#67B8FF]">
-                      {weekdaySleep} hrs
-                    </span>
+            <div className="flex-1 min-w-[300px]">
+              <ContentBlock>
+                {/* Sliders Section */}
+                <div className="space-y-6">
+                  {/* First Slider */}
+                  <div>
+                    <Label className="text-gray-200">
+                      Average Weekday Sleep (hours)
+                    </Label>
+                    <div className="flex items-center space-x-4 mt-2">
+                      <Moon className="text-[#67B8FF]" />
+                      <Slider
+                        min={0}
+                        max={12}
+                        step={0.5}
+                        value={[weekdaySleep]}
+                        onValueChange={(value) => setWeekdaySleep(value[0])}
+                        className="flex-1 [&_[role=slider]]:!bg-[#67B8FF]"
+                      />
+                      <Sun className="text-[#67B8FF]" />
+                      <span className="min-w-[4rem] text-right text-[#67B8FF]">
+                        {weekdaySleep} hrs
+                      </span>
+                    </div>
                   </div>
+
+                  {/* Second Slider */}
+                  <div>
+                    <Label className="text-gray-200">
+                      Duration of the period
+                    </Label>
+                    <div className="flex items-center space-x-4 mt-2">
+                      <Moon className="text-[#67B8FF]" />
+                      <Slider
+                        min={1}
+                        max={12}
+                        step={1}
+                        value={[duration]}
+                        onValueChange={(value) => setDuration(value[0])}
+                        className="flex-1 [&_[role=slider]]:!bg-[#67B8FF]"
+                      />
+                      <Sun className="text-[#67B8FF]" />
+                      <span className="min-w-[4rem] text-right text-[#67B8FF]">
+                        {duration} {duration === 1 ? 'week' : 'weeks'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Results Section */}
+                  {calculatedResults && (
+                    <div className="space-y-4 mt-8">
+                      <p>You have {calculatedResults.weeklyDebt.toFixed(1)} hours of sleep debt</p>
+                      <p>You function the same as a person who hasn't slept for 3 days straight</p>
+                      <p>Your cognitive ability will be 1.5x slower,</p>
+                      <p>your immune response will be 3.1x weaker. You will catch more colds and will be less productive.</p>
+                      <p>you will crave unhealthy food and will gain weight</p>
+                      <p>You will need to sleep 2 more hours a day for 3 months straight to remove your sleep debt</p>
+                    </div>
+                  )}
                 </div>
-
-                <div>
-                  <Label htmlFor="duration" className="text-gray-200">Duration of the period</Label>
-                  <div className="flex items-center space-x-4 mt-2">
-                    <Moon className="text-[#67B8FF]" />
-                    <Slider
-                      id="duration"
-                      min={1}
-                      max={12}
-                      step={1}
-                      value={[duration]}
-                      onValueChange={(values: number[]) => {
-                        setDuration(values[0]);
-                        console.log("Duration changed to:", values[0]); // Debug log
-                      }}
-                      className="flex-1 [&_[role=slider]]:!bg-[#67B8FF]"
-                    />
-                    <Sun className="text-[#67B8FF]" />
-                    <span className="min-w-[4rem] text-right text-[#67B8FF]">
-                      {duration} {duration === 1 ? 'week' : 'weeks'}
-                    </span>
-                  </div>
-                </div>
-
-                {calculatedResults && (
-                  <div className="space-y-4 mt-6">
-                    <p className="text-gray-200">You have {calculatedResults.weeklyDebt.toFixed(1)} hours of sleep debt</p>
-                    <p className="text-gray-200">You function the same as a person who hasn't slept for 3 days straight</p>
-                    <p className="text-gray-200">Your cognitive ability will be 1.5x slower,</p>
-                    <p className="text-gray-200">your immune response will be 3.1x weaker. You will catch more colds and will be less productive.</p>
-                    <p className="text-gray-200">you will crave unhealthy food and will gain weight</p>
-                    <p className="text-gray-200">You will need to sleep 2 more hours a day for 3 months straight to remove your sleep debt</p>
-                  </div>
-                )}
-              </div>
+              </ContentBlock>
             </div>
           </FlexContainer>
         </div>
