@@ -140,8 +140,8 @@ export default function SleepCalculatorPage() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
   const scale = useTransform(scrollY, [0, 300], [1, 0.95])
 
-  const [weekdaySleep, setWeekdaySleep] = useState(7)
-  const [duration, setDuration] = useState<number>(3)
+  const [weekdaySleep, setWeekdaySleep] = useState(8)
+  const [duration, setDuration] = useState<number>(1)
   const [calculatedResults, setCalculatedResults] = useState<CalculatedResults | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
