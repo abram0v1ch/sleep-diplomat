@@ -92,7 +92,7 @@ export default function HomePage() {
           </div>
 
           <motion.div 
-            className="text-center z-10"
+            className="text-center z-10 max-w-4xl mx-auto px-4"
             style={{ opacity, scale }}
           >
             <h1 className="text-5xl font-bold mb-4 text-white">
@@ -172,14 +172,16 @@ export default function HomePage() {
             <p className="text-xl mb-8 max-w-2xl mx-auto bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-medium">
               Use our Sleep Calculator to see the impact of your sleep habits.
             </p>
-            <Button size="lg" className="bg-gradient-to-r from-[#4A90E2] to-[#67B8FF] text-white 
-              hover:from-[#60A5F7] hover:to-[#89CDFF] 
-              transition-all duration-300 transform hover:scale-105 
-              shadow-[0_0_25px_rgba(74,144,226,0.5)] 
-              hover:shadow-[0_0_35px_rgba(74,144,226,0.7)]">
-              Try the Sleep Calculator
-              <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
+            <Link href="/calculator">
+              <Button size="lg" className="bg-gradient-to-r from-[#4A90E2] to-[#67B8FF] text-white 
+                hover:from-[#60A5F7] hover:to-[#89CDFF] 
+                transition-all duration-300 transform hover:scale-105 
+                shadow-[0_0_25px_rgba(74,144,226,0.5)] 
+                hover:shadow-[0_0_35px_rgba(74,144,226,0.7)]">
+                Try the Sleep Calculator
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </section>
       </main>
