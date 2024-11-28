@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { Moon, Sun, AlertTriangle, Brain, Heart, Coffee } from 'lucide-react'
+import { Moon, Sun, AlertTriangle, Brain, Heart, Coffee, Menu } from 'lucide-react'
 import Link from 'next/link'
 import styled from 'styled-components';
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { Button } from "@/components/ui/button"
 
 interface CalculatedResults {
   totalDebt: number;
@@ -142,6 +143,7 @@ export default function SleepCalculatorPage() {
   const [weekdaySleep, setWeekdaySleep] = useState(7)
   const [duration, setDuration] = useState<number>(3)
   const [calculatedResults, setCalculatedResults] = useState<CalculatedResults | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const rawDebt = (8 - weekdaySleep) * duration;
@@ -301,7 +303,7 @@ export default function SleepCalculatorPage() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a192f]/80 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <a className="text-xl font-semibold text-gray-100">Sleep Diplomat</a>
+            <a className="text-xl font-semibold text-gray-100 px-2">Sleep Diplomat</a>
             <nav className="hidden md:flex space-x-8">
               <Link href="/" className="text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors">
                 Home
@@ -316,7 +318,68 @@ export default function SleepCalculatorPage() {
                 Sleep Deprivation Calculator
               </Link>
             </nav>
+            <Button 
+              variant="ghost" 
+              className="md:hidden text-gray-100 px-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
           </div>
+
+          {/* Mobile menu */}
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.nav 
+                className="md:hidden py-4 space-y-4"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2, delay: 0.1 }}
+                >
+                  <Link href="/" className="block text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors px-2">
+                    Home
+                  </Link>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2, delay: 0.15 }}
+                >
+                  <Link href="/what-is-sleep" className="block text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors px-2">
+                    What is Sleep?
+                  </Link>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2, delay: 0.2 }}
+                >
+                  <Link href="/sleep-deprivation-effects" className="block text-sm font-medium text-gray-300 hover:text-gray-100 transition-colors px-2">
+                    Effects of Sleep Deprivation
+                  </Link>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2, delay: 0.25 }}
+                >
+                  <Link href="/calculator" className="block text-sm font-medium text-[#67B8FF] hover:text-[#89CDFF] transition-colors px-2">
+                    Sleep Deprivation Calculator
+                  </Link>
+                </motion.div>
+              </motion.nav>
+            )}
+          </AnimatePresence>
         </div>
       </header>
 
