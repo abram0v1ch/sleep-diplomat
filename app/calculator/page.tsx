@@ -105,6 +105,35 @@ const ContentBlock = styled.div`
   color: #fff;
 `;
 
+const AlertContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+`;
+
+const AlertTitle = styled.div<{ $hasDebt: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: ${props => props.$hasDebt ? '#FFC107' : '#4CAF50'}; // Yellow for debt, Green for no debt
+  font-size: 1.25rem;
+  font-weight: 500;
+`;
+
+const MainEffect = styled.p`
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+`;
+
+const RecoveryMessage = styled.p<{ $hasDebt: boolean }>`
+  font-weight: ${props => props.$hasDebt ? 600 : 'normal'};
+  font-size: ${props => props.$hasDebt ? '1.25rem' : '1rem'};
+  color: ${props => props.$hasDebt ? '#FF4444' : 'inherit'};
+  margin-top: 1rem;
+`;
+
 export default function SleepCalculatorPage() {
   const [age, setAge] = useState(25)
   const [weekdaySleep, setWeekdaySleep] = useState(7)
@@ -113,20 +142,20 @@ export default function SleepCalculatorPage() {
   const [calculatedResults, setCalculatedResults] = useState<CalculatedResults | null>(null)
 
   useEffect(() => {
-    const rawDebt = (8 - weekdaySleep) * 7 * duration;
+    const rawDebt = (8 - weekdaySleep) * duration;
     const finalDebt = Math.max(0, rawDebt);
     console.log('Sleep debt calculation:', {
       weekdaySleep,
       duration,
       rawDebt,
       finalDebt,
-      formula: `max(0, (8 - ${weekdaySleep}) * 7 * ${duration}) = ${finalDebt}`
+      formula: `max(0, (8 - ${weekdaySleep}) * ${duration}) = ${finalDebt}`
     });
     setCalculatedResults({ weeklyDebt: finalDebt });
   }, [weekdaySleep, duration]);
 
   const calculateSleepDebt = (weekdaySleep: number, durationWeeks: number): number => {
-    const debt = (8 - weekdaySleep) * 7 * durationWeeks;
+    const debt = (8 - weekdaySleep) * durationWeeks;
     return Math.max(0, debt);
   };
 
@@ -193,24 +222,24 @@ export default function SleepCalculatorPage() {
   const getSleepDeprivationEffects = (sleepDebt: number) => {
     if (sleepDebt === 0) {
       return {
-        emojis: ['😊', '✨', '💪'],
+        emojis: ['💪', '🌟', '🎯'],
         message: {
           mainEffect: "You're getting enough sleep!",
           details: [
-            "Keep maintaining this healthy sleep schedule.",
-            "Your body and mind are getting the rest they need.",
-            "This helps maintain optimal cognitive and physical performance."
+            "✨ Keep maintaining this healthy sleep schedule.",
+            "💪 Your body and mind are getting the rest they need.",
+            "🎯 This helps maintain optimal cognitive and physical performance."
           ]
         }
       };
     } else if (sleepDebt <= 10) {
       return {
-        emojis: ['🥱', '🧠', '⚡'],
+        emojis: ['🥱', '⚡', '📉'],
         message: {
           mainEffect: "Mild drowsiness and slower thinking.",
           details: [
-            "You may notice slight memory issues and reduced ability to stay alert.",
-            "You are more prone to errors and struggle to stay focused, making it difficult to perform routine activities effectively."
+            "🥱 You may notice slight memory issues and reduced ability to stay alert.",
+            "📉 You are more prone to errors and struggle to stay focused, making it difficult to perform routine activities effectively."
           ]
         }
       };
@@ -220,8 +249,8 @@ export default function SleepCalculatorPage() {
         message: {
           mainEffect: "You feel fatigued and irritable.",
           details: [
-            "Your immune system is weakened, making you more susceptible to colds and infections.",
-            "Emotional regulation becomes harder, resulting in increased anxiety, irritability, and mood swings."
+            "🦠 Your immune system is weakened, making you more susceptible to colds and infections.",
+            "😫 Emotional regulation becomes harder, resulting in increased anxiety, irritability, and mood swings."
           ]
         }
       };
@@ -231,50 +260,63 @@ export default function SleepCalculatorPage() {
         message: {
           mainEffect: "Your cognitive ability will be 30% slower, and your decision-making capacity significantly drops.",
           details: [
-            "Cravings for unhealthy, calorie-dense food increase due to hormonal imbalances, making weight management more difficult."          ]
+            "🤢 Cravings for unhealthy, calorie-dense food increase due to hormonal imbalances, making weight management more difficult."          ]
         }
       };
     } else if (sleepDebt <= 40) {
       return {
-        emojis: ['💔', '🍟', '🦠', '💊', '🥴'],
+        emojis: ['💔', '🍟', '🦠'],
         message: {
           mainEffect: "You are functioning similarly to someone who has been awake for multiple consecutive nights.",
           details: [
-            "Cognitive performance is severely impaired, with reduced memory recall and difficulty focusing. ", 
-            "Your immune system's response is weakened, making you more susceptible to infections and illnesses.", 
-            "Hormonal imbalances result in strong cravings for high-calorie and unhealthy foods, leading to weight gain.", 
-            "Emotional regulation becomes challenging, causing irritability, mood swings, and reduced resilience to stress.", 
-            "These effects, if prolonged, increase the risk of more serious conditions, such as cardiovascular issues, type 2 diabetes, and anxiety disorders."
+            "🫠 Cognitive performance is severely impaired, with reduced memory recall and difficulty focusing. ", 
+            "🦠 Your immune system's response is weakened, making you more susceptible to infections and illnesses.", 
+            "🍟 Hormonal imbalances result in strong cravings for high-calorie and unhealthy foods, leading to weight gain.", 
+            "😫 Emotional regulation becomes challenging, causing irritability, mood swings, and reduced resilience to stress.", 
+            "💔 These effects, if prolonged, increase the risk of more serious conditions, such as cardiovascular issues, type 2 diabetes, and anxiety disorders."
           ]
         }
       };
     } else if (sleepDebt <= 50) {
       return {
-        emojis: ['🥵', '💥', '🧠', '💊'],
+        emojis: ['🥵', '💥', '💊'],
         message: {
           mainEffect: "Severe cognitive impairment, confusion, and significant emotional instability. ",
           details: [
-            "You may experience microsleeps, putting you at risk of accidents.", 
-            "You are also at an increased risk of chronic health conditions, including hypertension, diabetes, and weakened cardiac health.", 
-            "Expect persistent fatigue, difficulty in performing basic tasks, and impaired judgment that can impact your day-to-day safety."
+            "🥵 You may experience microsleeps, putting you at risk of accidents.", 
+            "💊 You are also at an increased risk of chronic health conditions, including hypertension, diabetes, and weakened cardiac health.", 
+            "💥 Expect persistent fatigue, difficulty in performing basic tasks, and impaired judgment that can impact your day-to-day safety."
           ]
         }
       };
     } else {
       return {
-        emojis: ['🤯 ', '🛑', '💔','🧟‍♂️'],
+        emojis: ['🤯 ', '💔','🧟‍♂️'],
         message: {
           mainEffect: "Critical sleep debt!",
           details: [
-            "Your physical health is in a serious decline.", 
-            "Chronic stress levels are damaging your heart and overall health.", 
-            "You may experience hallucinations, paranoia, or extreme mental fatigue similar to the symptoms experienced by Peter Tripp during his record-breaking wakeathon.", 
-            "Immediate medical intervention may be necessary to prevent long-term damage or fatal consequences."
+            "🤕 Your physical health is in a serious decline.", 
+            "💔 Chronic stress levels are damaging your heart and overall health.", 
+            "🫠 You may experience hallucinations, paranoia, or extreme mental fatigue similar to the symptoms experienced by Peter Tripp during his record-breaking wakeathon.", 
+            "💀 Immediate medical intervention may be necessary to prevent long-term damage or fatal consequences."
           ]
         }
       };
     }
   };
+
+  const getCenterEmoji = (sleepDebt: number): string => {
+    if (sleepDebt === 0) return '😊';
+    if (sleepDebt <= 10) return '😐';
+    if (sleepDebt <= 20) return '😫';
+    if (sleepDebt <= 30) return '🫠';
+    if (sleepDebt <= 40) return '🥴';
+    if (sleepDebt <= 50) return '🤢';
+    return '💀'; // 65+ hours
+  };
+
+  // First, get the effects based on current sleep debt
+  const effects = calculatedResults ? getSleepDeprivationEffects(calculatedResults.weeklyDebt) : null;
 
   return (
     <div className="min-h-screen bg-[#0a192f] text-gray-100">
@@ -323,49 +365,39 @@ export default function SleepCalculatorPage() {
           <FlexContainer>
             <OrbitalSection>
               <OrbitalSystem>
-                <OrbitalContent>
-                  {/* Center emoji */}
-                  <div style={{ 
-                    position: 'absolute', 
-                    top: '50%', 
-                    left: '50%', 
-                    transform: 'translate(-50%, -50%)'
-                  }}>
-                    <span style={{ fontSize: 'min(10vw, 100px)' }}>
-                      {calculatedResults?.weeklyDebt > 0 ? '🫠' : '😊'}
-                    </span>
-                  </div>
+                {/* Center emoji */}
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                  <span style={{ fontSize: 'min(10vw, 100px)' }}>
+                    {calculatedResults && getCenterEmoji(calculatedResults.weeklyDebt)}
+                  </span>
+                </div>
 
-                  {/* Orbits */}
-                  <Orbit size={60} />  {/* 300px / 500px * 100 = 60% */}
-                  <Orbit size={80} />  {/* 400px / 500px * 100 = 80% */}
-                  <Orbit size={100} /> {/* 500px / 500px * 100 = 100% */}
+                {/* Static orbits */}
+                {effects && effects.emojis.map((_, index) => (
+                  <Orbit 
+                    key={`static-orbit-${index}`} 
+                    size={40 + (index * 20)} 
+                  />
+                ))}
 
-                  {/* Orbital items with percentage-based paths */}
-                  <OrbitPath size={60} duration={15}>
-                    <OrbitItem>
-                      <span style={{ fontSize: 'min(3vw, 24px)' }}>🦠</span>
-                    </OrbitItem>
-                  </OrbitPath>
-
-                  <OrbitPath size={80} duration={20}>
-                    <OrbitItem>
-                      <span style={{ fontSize: 'min(3vw, 24px)' }}>🍟</span>
-                    </OrbitItem>
-                  </OrbitPath>
-
-                  <OrbitPath size={80} duration={20} style={{ animationDelay: '-10s' }}>
-                    <OrbitItem>
-                      <span style={{ fontSize: 'min(3vw, 24px)' }}>💔</span>
-                    </OrbitItem>
-                  </OrbitPath>
-
-                  <OrbitPath size={100} duration={25}>
-                    <OrbitItem>
-                      <span style={{ fontSize: 'min(3vw, 24px)' }}>💊</span>
-                    </OrbitItem>
-                  </OrbitPath>
-                </OrbitalContent>
+                {/* Orbital items - This is where we need to use the effects */}
+                {effects && effects.emojis.map((emoji, index) => {
+                  // Calculate orbit size dynamically based on number of emojis
+                  const orbitSize = 40 + (index * 20); // This will create orbits at 40px, 60px, 80px, 100px, etc.
+                  const duration = 15 + (index * 5); // This will create durations of 15s, 20s, 25s, 30s, etc.
+                  
+                  return (
+                    <OrbitPath 
+                      key={`orbit-${index}-${emoji}`}
+                      size={orbitSize} 
+                      duration={duration}
+                    >
+                      <OrbitItem>
+                        <span style={{ fontSize: 'min(3vw, 24px)' }}>{emoji}</span>
+                      </OrbitItem>
+                    </OrbitPath>
+                  );
+                })}
               </OrbitalSystem>
             </OrbitalSection>
 
@@ -376,13 +408,13 @@ export default function SleepCalculatorPage() {
                   {/* First Slider */}
                   <div>
                     <Label className="text-gray-200">
-                      Average Weekday Sleep (hours)
+                      Average Daily Sleep (hours)
                     </Label>
                     <div className="flex items-center space-x-4 mt-2">
                       <Moon className="text-[#67B8FF]" />
                       <Slider
-                        min={0}
-                        max={12}
+                        min={2}
+                        max={10}
                         step={0.5}
                         value={[weekdaySleep]}
                         onValueChange={(value) => setWeekdaySleep(value[0])}
@@ -404,7 +436,7 @@ export default function SleepCalculatorPage() {
                       <Moon className="text-[#67B8FF]" />
                       <Slider
                         min={1}
-                        max={12}
+                        max={10}
                         step={1}
                         value={[duration]}
                         onValueChange={(value) => setDuration(value[0])}
@@ -412,25 +444,42 @@ export default function SleepCalculatorPage() {
                       />
                       <Sun className="text-[#67B8FF]" />
                       <span className="min-w-[4rem] text-right text-[#67B8FF]">
-                        {duration} {duration === 1 ? 'week' : 'weeks'}
+                        {duration} {duration === 1 ? 'day' : 'days'}
                       </span>
                     </div>
                   </div>
 
                   {/* Results Section */}
                   {calculatedResults && (
-                    <div className="space-y-4 mt-8">
-                      <p>You have {calculatedResults.weeklyDebt.toFixed(1)} hours of sleep debt</p>
-                      <p>{getSleepDeprivationEffects(calculatedResults.weeklyDebt).message.mainEffect}</p>
-                      {getSleepDeprivationEffects(calculatedResults.weeklyDebt).message.details.map((detail, index) => (
-                        <p key={`detail-${index}`}>{detail}</p>
-                      ))}
-                      {calculatedResults.weeklyDebt > 0 && (
-                        <p>
-                          You will need to sleep {Math.ceil(calculatedResults.weeklyDebt / 7)} more hours a day for {Math.ceil(calculatedResults.weeklyDebt * 2 / 7)} weeks straight to remove your sleep debt
-                        </p>
-                      )}
-                    </div>
+                    <AlertContainer>
+                      <AlertTitle $hasDebt={calculatedResults.weeklyDebt > 0}>
+                        {calculatedResults.weeklyDebt > 0 ? (
+                          <>
+                            <span>⚠️</span>
+                            <p>You have {calculatedResults.weeklyDebt.toFixed(1)} hours of sleep debt</p>
+                          </>
+                        ) : (
+                          <>
+                            <span>✅</span>
+                            <p>Good job! You don't have any sleep debt!</p>
+                          </>
+                        )}
+                      </AlertTitle>
+                      
+                      <div className="space-y-4">
+                        <MainEffect>
+                          {getSleepDeprivationEffects(calculatedResults.weeklyDebt).message.mainEffect}
+                        </MainEffect>
+                        {getSleepDeprivationEffects(calculatedResults.weeklyDebt).message.details.map((detail, index) => (
+                          <p key={`detail-${index}`}>{detail}</p>
+                        ))}
+                        {calculatedResults.weeklyDebt > 0 && (
+                          <RecoveryMessage $hasDebt={true}>
+                            You will need to sleep 2 additional hours a day for {Math.ceil(calculatedResults.weeklyDebt / 2)} days straight to remove your sleep debt
+                          </RecoveryMessage>
+                        )}
+                      </div>
+                    </AlertContainer>
                   )}
                 </div>
               </ContentBlock>
