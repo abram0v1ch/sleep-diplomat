@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Moon, Sun, AlertTriangle, Brain, Heart, Coffee } from 'lucide-react'
 import Link from 'next/link'
+import styled from 'styled-components';
 
 interface CalculatedResults {
   recommendedSleep: number
@@ -19,15 +20,78 @@ interface CalculatedResults {
   averageSleep: number
 }
 
+const VisualizationSection = styled.div`
+  flex: 1;
+  position: relative;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const OrbitalSystem = styled.div`
+  position: relative;
+  width: 500px;
+  height: 500px;
+  margin-right: 2rem;
+`;
+
+const OrbitPath = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+  animation: rotate ${props => props.duration}s linear infinite;
+
+  @keyframes rotate {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+`;
+
+const OrbitItem = styled.div`
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const FlexContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem;
+  border-radius: 1rem;
+`;
+
+const Orbit = styled.div`
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
+`;
+
 export default function SleepCalculatorPage() {
   const [age, setAge] = useState(25)
   const [weekdaySleep, setWeekdaySleep] = useState(7)
   const [weekendSleep, setWeekendSleep] = useState(8)
+  const [duration, setDuration] = useState<number>(3)
   const [calculatedResults, setCalculatedResults] = useState<CalculatedResults | null>(null)
 
   useEffect(() => {
     calculateSleepDebt()
-  }, [age, weekdaySleep, weekendSleep])
+  }, [duration, weekdaySleep, weekendSleep, age])
 
   const calculateSleepDebt = () => {
     let recommendedSleep
@@ -156,133 +220,111 @@ export default function SleepCalculatorPage() {
         </div>
       </section>
 
-      {/* Calculator Section */}
+      {/* Add the visualization section after the hero section */}
       <section className="py-24 bg-[#112240]">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-semibold mb-12 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
-            Enter your details below to calculate your sleep debt or surplus.
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <Card className="night-card">
-              <CardHeader>
-                <CardTitle className="night-card-title">
-                  <Moon className="w-6 h-6 mr-2 text-[#67B8FF]" />
-                  Calculate Your Sleep Pattern
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-8">
-                  <div>
-                    <Label htmlFor="age" className="text-gray-200">Age</Label>
-                    <Input
-                      id="age"
-                      type="number"
-                      value={age}
-                      onChange={(e) => setAge(Number(e.target.value))}
-                      min="1"
-                      max="120"
-                      className="bg-[#1B2C4F] border-[#243B67] text-gray-100 focus:ring-[#67B8FF] focus:border-[#67B8FF]"
+          <FlexContainer>
+            {/* Visualization on the left */}
+            <VisualizationSection>
+              <OrbitalSystem>
+                {/* Center emoji */}
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+                  <span style={{ fontSize: '100px' }}>
+                    {calculatedResults?.weeklyDebt > 0 ? '🫠' : '😊'}
+                  </span>
+                </div>
+                
+                {/* Static orbit circles */}
+                <Orbit size={300} />
+                <Orbit size={400} />
+                <Orbit size={500} />
+                
+                {/* Rotating paths with emojis */}
+                <OrbitPath size={300} duration={15}>
+                  <OrbitItem>
+                    <span style={{ fontSize: '24px' }}>🦠</span>
+                  </OrbitItem>
+                </OrbitPath>
+
+                <OrbitPath size={400} duration={20}>
+                  <OrbitItem>
+                    <span style={{ fontSize: '24px' }}>🍟</span>
+                  </OrbitItem>
+                </OrbitPath>
+
+                <OrbitPath size={400} duration={20} style={{ animationDelay: '-10s' }}>
+                  <OrbitItem>
+                    <span style={{ fontSize: '24px' }}>💔</span>
+                  </OrbitItem>
+                </OrbitPath>
+
+                <OrbitPath size={500} duration={25}>
+                  <OrbitItem>
+                    <span style={{ fontSize: '24px' }}>💊</span>
+                  </OrbitItem>
+                </OrbitPath>
+              </OrbitalSystem>
+            </VisualizationSection>
+
+            {/* Sleep debt calculations on the right */}
+            <div className="flex-1 p-6 rounded-lg">
+              <div className="space-y-6">
+                <div>
+                  <Label htmlFor="weekdaySleep" className="text-gray-200">Average Weekday Sleep (hours)</Label>
+                  <div className="flex items-center space-x-4 mt-2">
+                    <Moon className="text-[#67B8FF]" />
+                    <Slider
+                      id="weekdaySleep"
+                      min={0}
+                      max={12}
+                      step={0.5}
+                      value={[weekdaySleep]}
+                      onValueChange={(value) => setWeekdaySleep(value[0])}
+                      className="flex-1 [&_[role=slider]]:!bg-[#67B8FF]"
                     />
-                  </div>
-                  <div>
-                    <Label htmlFor="weekdaySleep" className="text-gray-200">Average Weekday Sleep (hours)</Label>
-                    <div className="flex items-center space-x-4 mt-2">
-                      <Moon className="text-[#67B8FF]" />
-                      <Slider
-                        id="weekdaySleep"
-                        min={0}
-                        max={12}
-                        step={0.5}
-                        value={[weekdaySleep]}
-                        onValueChange={(value) => setWeekdaySleep(value[0])}
-                        className="flex-1 [&_[role=slider]]:!bg-[#67B8FF] [&_[role=slider]]:!border-[#67B8FF] [&_.relative_.range-slider]:!bg-[#67B8FF] [&_.relative_.bg-primary]:!bg-[#243B67]"
-                      />
-                      <Sun className="text-[#67B8FF]" />
-                      <span className="min-w-[4rem] text-right text-[#67B8FF] font-medium">
-                        {weekdaySleep} hrs
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <Label htmlFor="weekendSleep" className="text-gray-200">Average Weekend Sleep (hours)</Label>
-                    <div className="flex items-center space-x-4 mt-2">
-                      <Moon className="text-[#67B8FF]" />
-                      <Slider
-                        id="weekendSleep"
-                        min={0}
-                        max={12}
-                        step={0.5}
-                        value={[weekendSleep]}
-                        onValueChange={(value) => setWeekendSleep(value[0])}
-                        className="flex-1 [&_[role=slider]]:!bg-[#67B8FF] [&_[role=slider]]:!border-[#67B8FF] [&_.relative_.range-slider]:!bg-[#67B8FF] [&_.relative_.bg-primary]:!bg-[#243B67]"
-                      />
-                      <Sun className="text-[#67B8FF]" />
-                      <span className="min-w-[4rem] text-right text-[#67B8FF] font-medium">
-                        {weekendSleep} hrs
-                      </span>
-                    </div>
+                    <Sun className="text-[#67B8FF]" />
+                    <span className="min-w-[4rem] text-right text-[#67B8FF]">
+                      {weekdaySleep} hrs
+                    </span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
 
-            {calculatedResults && (
-              <Card className="night-card">
-                <CardHeader>
-                  <CardTitle className="night-card-title">
-                    <Brain className="w-6 h-6 mr-2 text-[#67B8FF]" />
-                    Your Sleep Results
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    <div className="p-4 bg-[#1B2C4F] rounded-lg">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-gray-300">Recommended Sleep</span>
-                        <span className="text-2xl font-bold text-[#67B8FF]">
-                          {calculatedResults.recommendedSleep}h
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-300">Your Average</span>
-                        <span className="text-2xl font-bold text-white">
-                          {calculatedResults.averageSleep.toFixed(1)}h
-                        </span>
-                      </div>
-                    </div>
-
-                    {calculatedResults.weeklyDebt > 0 && (
-                      <div className="p-4 bg-[#1B2C4F] rounded-lg border border-yellow-500/20">
-                        <div className="flex items-start space-x-3">
-                          <AlertTriangle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-1" />
-                          <div>
-                            <p className="text-yellow-500 font-medium">Sleep Debt Alert</p>
-                            <p className="text-gray-300">Weekly: {calculatedResults.weeklyDebt.toFixed(1)}h</p>
-                            <p className="text-gray-300">Monthly: {calculatedResults.monthlyDebt.toFixed(1)}h</p>
-                            <p className="text-gray-300">Yearly: {calculatedResults.yearlyDebt.toFixed(1)}h</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {calculatedResults.weeklyOverslept > 0 && (
-                      <div className="p-4 bg-[#1B2C4F] rounded-lg border border-blue-500/20">
-                        <div className="flex items-start space-x-3">
-                          <AlertTriangle className="w-5 h-5 text-[#67B8FF] flex-shrink-0 mt-1" />
-                          <div>
-                            <p className="text-[#67B8FF] font-medium">Excess Sleep Pattern</p>
-                            <p className="text-gray-300">Weekly: {calculatedResults.weeklyOverslept.toFixed(1)}h</p>
-                            <p className="text-gray-300">Monthly: {calculatedResults.monthlyOverslept.toFixed(1)}h</p>
-                            <p className="text-gray-300">Yearly: {calculatedResults.yearlyOverslept.toFixed(1)}h</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                <div>
+                  <Label htmlFor="duration" className="text-gray-200">Duration of the period</Label>
+                  <div className="flex items-center space-x-4 mt-2">
+                    <Moon className="text-[#67B8FF]" />
+                    <Slider
+                      id="duration"
+                      min={1}
+                      max={12}
+                      step={1}
+                      value={[duration]}
+                      onValueChange={(values: number[]) => {
+                        setDuration(values[0]);
+                        console.log("Duration changed to:", values[0]); // Debug log
+                      }}
+                      className="flex-1 [&_[role=slider]]:!bg-[#67B8FF]"
+                    />
+                    <Sun className="text-[#67B8FF]" />
+                    <span className="min-w-[4rem] text-right text-[#67B8FF]">
+                      {duration} {duration === 1 ? 'week' : 'weeks'}
+                    </span>
                   </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
+                </div>
+
+                {calculatedResults && (
+                  <div className="space-y-4 mt-6">
+                    <p className="text-gray-200">You have {calculatedResults.weeklyDebt.toFixed(1)} hours of sleep debt</p>
+                    <p className="text-gray-200">You function the same as a person who hasn't slept for 3 days straight</p>
+                    <p className="text-gray-200">Your cognitive ability will be 1.5x slower,</p>
+                    <p className="text-gray-200">your immune response will be 3.1x weaker. You will catch more colds and will be less productive.</p>
+                    <p className="text-gray-200">you will crave unhealthy food and will gain weight</p>
+                    <p className="text-gray-200">You will need to sleep 2 more hours a day for 3 months straight to remove your sleep debt</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </FlexContainer>
         </div>
       </section>
 
