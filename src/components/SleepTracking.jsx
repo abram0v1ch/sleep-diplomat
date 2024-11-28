@@ -109,7 +109,7 @@ const SleepTracking = () => {
 
         <div style={{ marginTop: '2rem' }}>
           <p>You have XX hours of sleep debt</p>
-          <p>You function the same as a person who hasn't slept for 3 days straight</p>
+          <p>You function the same as a person who hasn&apos;t slept for 3 days straight</p>
           <p>Your cognitive ability will be 1.5x slower,</p>
           <p>your immune response will be 3.1x weaker. You will catch more colds and will be less productive.</p>
           <p>you will crave unhealthy food and will gain weight</p>

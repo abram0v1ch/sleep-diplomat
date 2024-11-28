@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Moon, Sun, AlertTriangle, Brain, Heart, Coffee } from 'lucide-react'
 import Link from 'next/link'
 import styled from 'styled-components';
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 interface CalculatedResults {
   totalDebt: number;
@@ -38,14 +38,6 @@ const OrbitalSystem = styled.div`
   position: relative;
   width: 100%;
   padding-bottom: 100%; // Makes it square
-`;
-
-const OrbitalContent = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
 `;
 
 // Add interfaces for the styled components that use props
@@ -103,16 +95,6 @@ const OrbitItem = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const ResultsContainer = styled.div`
-  background: rgba(27, 44, 79, 0.5); // Slightly transparent dark blue
-  border-radius: 1rem;
-  padding: 2rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  width: 100%;
-  margin-top: 1rem;
-`;
-
 const ContentBlock = styled.div`
   background: rgba(27, 44, 79, 0.5);
   border-radius: 1rem;
@@ -153,9 +135,11 @@ const RecoveryMessage = styled.p<RecoveryMessageProps>`
 `;
 
 export default function SleepCalculatorPage() {
-  const [age, setAge] = useState(25)
+  const { scrollY } = useScroll()
+  const opacity = useTransform(scrollY, [0, 300], [1, 0])
+  const scale = useTransform(scrollY, [0, 300], [1, 0.95])
+
   const [weekdaySleep, setWeekdaySleep] = useState(7)
-  const [weekendSleep, setWeekendSleep] = useState(8)
   const [duration, setDuration] = useState<number>(3)
   const [calculatedResults, setCalculatedResults] = useState<CalculatedResults | null>(null)
 
@@ -171,11 +155,6 @@ export default function SleepCalculatorPage() {
     });
     setCalculatedResults({ totalDebt: finalDebt });
   }, [weekdaySleep, duration]);
-
-  const calculateSleepDebt = (weekdaySleep: number, durationWeeks: number): number => {
-    const debt = (8 - weekdaySleep) * durationWeeks;
-    return Math.max(0, debt);
-  };
 
   const getSleepStatus = (weekdaySleep: number): 'deprived' | 'optimal' => {
     const recommendedSleep = 8; // Using 8 hours as the recommended amount
@@ -347,19 +326,26 @@ export default function SleepCalculatorPage() {
           <div className="stars absolute inset-0 opacity-50"></div>
           <div className="crescent-moon absolute top-10 right-20"></div>
         </div>
-        <div className="text-center z-10 max-w-4xl mx-auto px-4">
+        <motion.div 
+          initial={{ opacity: 1, scale: 1 }}
+          className="text-center z-10 max-w-4xl mx-auto px-4"
+          style={{ opacity, scale }}
+        >
           <h1 className="text-5xl font-bold mb-8 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
             Sleep Deprivation Calculator
           </h1>
           <p className="text-xl mb-8 text-gray-200">
             Understand your sleep patterns and discover how they might be affecting your health. 
           </p>
-        </div>
+        </motion.div>
       </section>
 
       {/* Add the visualization section after the hero section */}
       <section className="py-24 bg-[#112240]">
         <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl font-semibold mb-12 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
+            Calculate Your Sleep Debt
+          </h2>
           <FlexContainer>
             <OrbitalSection>
               <OrbitalSystem>
@@ -459,7 +445,7 @@ export default function SleepCalculatorPage() {
                         ) : (
                           <>
                             <span>✅</span>
-                            <p>Good job! You don't have any sleep debt!</p>
+                            <p>Good job! You don&apos;t have any sleep debt!</p>
                           </>
                         )}
                       </AlertTitle>
@@ -506,7 +492,7 @@ export default function SleepCalculatorPage() {
                           Optimal Sleep Duration
                         </h3>
                         <p className="text-gray-300 text-lg">
-                          You're maintaining healthy sleep habits!
+                          You&apos;re maintaining healthy sleep habits!
                         </p>
                       </div>
 

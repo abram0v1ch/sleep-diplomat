@@ -4,8 +4,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Brain, Moon, Sun, Activity, Clock, Trophy, Scale, AlertCircle, Heart, Shield, Cloud } from 'lucide-react'
 import Link from 'next/link'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 export default function WhatIsSleepPage() {
+  const { scrollY } = useScroll()
+  const opacity = useTransform(scrollY, [0, 300], [1, 0])
+  const scale = useTransform(scrollY, [0, 300], [1, 0.95])
+
   return (
     <div className="min-h-screen bg-[#0a192f] text-gray-100">
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a192f]/80 backdrop-blur-md">
@@ -28,7 +33,11 @@ export default function WhatIsSleepPage() {
             <div className="stars absolute inset-0 opacity-50"></div>
             <div className="crescent-moon absolute top-10 right-20"></div>
           </div>
-          <div className="text-center z-10 max-w-4xl mx-auto px-4">
+          <motion.div 
+            initial={{ opacity: 1, scale: 1 }}
+            className="text-center z-10 max-w-4xl mx-auto px-4"
+            style={{ opacity, scale }}
+          >
             <h1 className="text-5xl font-bold mb-8 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
               Understanding Sleep
             </h1>
@@ -37,7 +46,7 @@ export default function WhatIsSleepPage() {
               reduced sensory activity, and decreased voluntary muscle movement. It&apos;s an essential biological process 
               that is crucial for your mental and physical well-being.
             </p>
-          </div>
+          </motion.div>
         </section>
 
         <section className="py-24 bg-[#112240]">
