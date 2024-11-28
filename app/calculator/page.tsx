@@ -10,7 +10,7 @@ import Link from 'next/link'
 import styled from 'styled-components';
 
 interface CalculatedResults {
-  weeklyDebt: number;
+  totalDebt: number;
 }
 
 const FlexContainer = styled.div`
@@ -48,7 +48,25 @@ const OrbitalContent = styled.div`
   height: 100%;
 `;
 
-const Orbit = styled.div`
+// Add interfaces for the styled components that use props
+interface OrbitProps {
+  size: number;
+}
+
+interface OrbitPathProps {
+  size: number;
+  duration: number;
+}
+
+interface AlertTitleProps {
+  $hasDebt: boolean;
+}
+
+interface RecoveryMessageProps {
+  $hasDebt: boolean;
+}
+
+const Orbit = styled.div<OrbitProps>`
   position: absolute;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
@@ -59,7 +77,7 @@ const Orbit = styled.div`
   height: ${props => `${props.size}%`};
 `;
 
-const OrbitPath = styled.div`
+const OrbitPath = styled.div<OrbitPathProps>`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -112,7 +130,7 @@ const AlertContainer = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const AlertTitle = styled.div<{ $hasDebt: boolean }>`
+const AlertTitle = styled.div<AlertTitleProps>`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -127,7 +145,7 @@ const MainEffect = styled.p`
   margin-bottom: 0.5rem;
 `;
 
-const RecoveryMessage = styled.p<{ $hasDebt: boolean }>`
+const RecoveryMessage = styled.p<RecoveryMessageProps>`
   font-weight: ${props => props.$hasDebt ? 600 : 'normal'};
   font-size: ${props => props.$hasDebt ? '1.25rem' : '1rem'};
   color: ${props => props.$hasDebt ? '#FF4444' : 'inherit'};
@@ -151,7 +169,7 @@ export default function SleepCalculatorPage() {
       finalDebt,
       formula: `max(0, (8 - ${weekdaySleep}) * ${duration}) = ${finalDebt}`
     });
-    setCalculatedResults({ weeklyDebt: finalDebt });
+    setCalculatedResults({ totalDebt: finalDebt });
   }, [weekdaySleep, duration]);
 
   const calculateSleepDebt = (weekdaySleep: number, durationWeeks: number): number => {
@@ -159,14 +177,14 @@ export default function SleepCalculatorPage() {
     return Math.max(0, debt);
   };
 
-  const getSleepStatus = (averageSleep: number, recommendedSleep: number) => {
-    const diff = averageSleep - recommendedSleep
-    if (Math.abs(diff) <= 0.5) return "optimal"
-    if (diff < 0) return "deprived"
-    return "excess"
-  }
+  const getSleepStatus = (weekdaySleep: number): 'deprived' | 'optimal' => {
+    const recommendedSleep = 8; // Using 8 hours as the recommended amount
+    const diff = weekdaySleep - recommendedSleep;
+    if (Math.abs(diff) <= 0.5) return "optimal";
+    return "deprived";
+  };
 
-  const getRelevantEffects = (status: 'deprived' | 'excess' | 'optimal') => {
+  const getRelevantEffects = (status: 'deprived' | 'optimal') => {
     type TimeframeKey = 'immediate' | 'shortTerm' | 'longTerm';
     const effects: Record<typeof status, Record<TimeframeKey, string[]>> = {
       deprived: {
@@ -188,26 +206,6 @@ export default function SleepCalculatorPage() {
           "Chronic immune system issues",
           "Increased risk of obesity and associated health problems",
           "Higher risk of mental health disorders"
-        ]
-      },
-      excess: {
-        immediate: [
-          "Grogginess and difficulty waking up",
-          "Headaches",
-          "Back pain",
-          "Increased fatigue during the day"
-        ],
-        shortTerm: [
-          "Disrupted sleep cycle",
-          "Increased risk of obesity",
-          "Higher risk of depression",
-          "Impaired cognitive function"
-        ],
-        longTerm: [
-          "Increased risk of diabetes",
-          "Higher risk of heart disease",
-          "Potential cognitive decline",
-          "Increased inflammation in the body"
         ]
       },
       optimal: {
@@ -316,7 +314,7 @@ export default function SleepCalculatorPage() {
   };
 
   // First, get the effects based on current sleep debt
-  const effects = calculatedResults ? getSleepDeprivationEffects(calculatedResults.weeklyDebt) : null;
+  const effects = calculatedResults ? getSleepDeprivationEffects(calculatedResults.totalDebt) : null;
 
   return (
     <div className="min-h-screen bg-[#0a192f] text-gray-100">
@@ -368,7 +366,7 @@ export default function SleepCalculatorPage() {
                 {/* Center emoji */}
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
                   <span style={{ fontSize: 'min(10vw, 100px)' }}>
-                    {calculatedResults && getCenterEmoji(calculatedResults.weeklyDebt)}
+                    {calculatedResults && getCenterEmoji(calculatedResults.totalDebt)}
                   </span>
                 </div>
 
@@ -452,11 +450,11 @@ export default function SleepCalculatorPage() {
                   {/* Results Section */}
                   {calculatedResults && (
                     <AlertContainer>
-                      <AlertTitle $hasDebt={calculatedResults.weeklyDebt > 0}>
-                        {calculatedResults.weeklyDebt > 0 ? (
+                      <AlertTitle $hasDebt={calculatedResults.totalDebt > 0}>
+                        {calculatedResults.totalDebt > 0 ? (
                           <>
                             <span>⚠️</span>
-                            <p>You have {calculatedResults.weeklyDebt.toFixed(1)} hours of sleep debt</p>
+                            <p>You have {calculatedResults.totalDebt.toFixed(1)} hours of sleep debt</p>
                           </>
                         ) : (
                           <>
@@ -468,14 +466,14 @@ export default function SleepCalculatorPage() {
                       
                       <div className="space-y-4">
                         <MainEffect>
-                          {getSleepDeprivationEffects(calculatedResults.weeklyDebt).message.mainEffect}
+                          {getSleepDeprivationEffects(calculatedResults.totalDebt).message.mainEffect}
                         </MainEffect>
-                        {getSleepDeprivationEffects(calculatedResults.weeklyDebt).message.details.map((detail, index) => (
+                        {getSleepDeprivationEffects(calculatedResults.totalDebt).message.details.map((detail, index) => (
                           <p key={`detail-${index}`}>{detail}</p>
                         ))}
-                        {calculatedResults.weeklyDebt > 0 && (
+                        {calculatedResults.totalDebt > 0 && (
                           <RecoveryMessage $hasDebt={true}>
-                            You will need to sleep 2 additional hours a day for {Math.ceil(calculatedResults.weeklyDebt / 2)} days straight to remove your sleep debt
+                            You will need to sleep 2 additional hours a day for {Math.ceil(calculatedResults.totalDebt / 2)} days straight to remove your sleep debt
                           </RecoveryMessage>
                         )}
                       </div>
@@ -495,30 +493,125 @@ export default function SleepCalculatorPage() {
             <h2 className="text-3xl font-semibold mb-12 bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
               Potential Effects of Your Sleep Pattern
             </h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              {(['immediate', 'shortTerm', 'longTerm'] as const).map((timeframe) => (
-                <Card key={timeframe} className="bg-[#112240] border-none shadow-lg shadow-black/20">
-                  <CardHeader>
-                    <CardTitle className="text-gray-100 flex items-center text-lg">
-                      {timeframe === 'immediate' && <Coffee className="w-5 h-5 mr-2 text-[#67B8FF]" />}
-                      {timeframe === 'shortTerm' && <Brain className="w-5 h-5 mr-2 text-[#67B8FF]" />}
-                      {timeframe === 'longTerm' && <Heart className="w-5 h-5 mr-2 text-[#67B8FF]" />}
-                      {timeframe === 'immediate' ? 'Immediate' : timeframe === 'shortTerm' ? 'Short-term' : 'Long-term'} Effects
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3">
-                      {getRelevantEffects(getSleepStatus(calculatedResults.averageSleep, calculatedResults.recommendedSleep))[timeframe]?.map((effect, index) => (
-                        <li key={index} className="flex items-start space-x-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
-                          <span className="text-gray-300">{effect}</span>
-                        </li>
-                      ))}
-                    </ul>
+            
+            {getSleepStatus(weekdaySleep) === 'optimal' ? (
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card className="bg-[#112240] border-none shadow-lg shadow-black/20 md:col-span-2">
+                  <CardContent className="p-8">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                      {/* Left side - Icon and Title */}
+                      <div className="text-center md:text-left md:flex-shrink-0">
+                        <div className="text-6xl mb-4">✨</div>
+                        <h3 className="text-2xl font-semibold text-[#67B8FF] mb-2">
+                          Optimal Sleep Duration
+                        </h3>
+                        <p className="text-gray-300 text-lg">
+                          You're maintaining healthy sleep habits!
+                        </p>
+                      </div>
+
+                      {/* Right side - Benefits Grid */}
+                      <div className="flex-grow">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-[#67B8FF]">
+                              <Brain className="w-5 h-5" />
+                              <h4 className="font-semibold">Cognitive Benefits</h4>
+                            </div>
+                            <ul className="text-gray-300 space-y-1">
+                              <li className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF]" />
+                                Enhanced memory and focus
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF]" />
+                                Better decision-making
+                              </li>
+                            </ul>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-[#67B8FF]">
+                              <Heart className="w-5 h-5" />
+                              <h4 className="font-semibold">Physical Benefits</h4>
+                            </div>
+                            <ul className="text-gray-300 space-y-1">
+                              <li className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF]" />
+                                Strong immune system
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF]" />
+                                Optimal recovery
+                              </li>
+                            </ul>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-[#67B8FF]">
+                              <Coffee className="w-5 h-5" />
+                              <h4 className="font-semibold">Energy Levels</h4>
+                            </div>
+                            <ul className="text-gray-300 space-y-1">
+                              <li className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF]" />
+                                Sustained daytime alertness
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF]" />
+                                Natural energy regulation
+                              </li>
+                            </ul>
+                          </div>
+
+                          <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-[#67B8FF]">
+                              <Sun className="w-5 h-5" />
+                              <h4 className="font-semibold">Emotional Balance</h4>
+                            </div>
+                            <ul className="text-gray-300 space-y-1">
+                              <li className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF]" />
+                                Stable mood
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF]" />
+                                Better stress resilience
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-3 gap-8">
+                {(['immediate', 'shortTerm', 'longTerm'] as const).map((timeframe) => (
+                  <Card key={timeframe} className="bg-[#112240] border-none shadow-lg shadow-black/20">
+                    <CardHeader>
+                      <CardTitle className="text-gray-100 flex items-center text-lg">
+                        {timeframe === 'immediate' && <Coffee className="w-5 h-5 mr-2 text-[#67B8FF]" />}
+                        {timeframe === 'shortTerm' && <Brain className="w-5 h-5 mr-2 text-[#67B8FF]" />}
+                        {timeframe === 'longTerm' && <Heart className="w-5 h-5 mr-2 text-[#67B8FF]" />}
+                        {timeframe === 'immediate' ? 'Immediate' : timeframe === 'shortTerm' ? 'Short-term' : 'Long-term'} Effects
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-3">
+                        {getRelevantEffects(getSleepStatus(weekdaySleep))[timeframe]?.map((effect, index) => (
+                          <li key={index} className="flex items-start space-x-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#67B8FF] mt-2 flex-shrink-0" />
+                            <span className="text-gray-300">{effect}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}
